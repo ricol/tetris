@@ -1,0 +1,7 @@
+WaveDelete wave "delete.wav"
+WaveFall wave "fall.wav"
+BackGroundMusic wave "music.wav"
+WaveRotate wave "rotate.wav"
+WavePause wave "pause.wav"
+WaveMove wave "move.wav"
+WaveGameFail wave "GameFail.wav"
