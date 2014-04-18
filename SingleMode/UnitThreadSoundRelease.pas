@@ -35,7 +35,7 @@ begin
   FForm := tmpForm;
 end;
 
-// Õ∑≈±≥æ∞“Ù¿÷
+//  Õ∑≈±≥æ∞“Ù¿÷
 procedure TThreadSoundRelease.ReleaseMusicFromResource(FileName: string);
 var
   r: TResourceStream;

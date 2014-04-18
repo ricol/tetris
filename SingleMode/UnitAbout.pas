@@ -16,7 +16,8 @@ type
     OKButton: TButton;
   private
     { Private declarations }
-    procedure ProcessMessage_WM_KILLFOCUS(var tmMsg: TMessage); message WM_KILLFOCUS;
+    procedure ProcessMessage_WM_KILLFOCUS(var tmMsg: TMessage);
+      message WM_KILLFOCUS;
   public
     { Public declarations }
   end;
@@ -27,7 +28,6 @@ var
 implementation
 
 {$R *.dfm}
-
 { TAboutBox }
 
 procedure TAboutBox.ProcessMessage_WM_KILLFOCUS(var tmMsg: TMessage);
@@ -37,4 +37,3 @@ begin
 end;
 
 end.
-

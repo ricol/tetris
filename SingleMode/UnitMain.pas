@@ -1,7 +1,7 @@
 unit UnitMain;
 
 {
-CONTACT: WANGXINGHE1983@GMAIL.COM
+  CONTACT: WANGXINGHE1983@GMAIL.COM
 }
 
 interface
@@ -117,8 +117,7 @@ type
     procedure MenuGameStartClick(Sender: TObject);
     procedure MenuGameStopClick(Sender: TObject);
     procedure TimerSquareMoveTimer(Sender: TObject);
-    procedure FormKeyDown(Sender: TObject; var Key: Word;
-      Shift: TShiftState);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure MenuHelpAboutClick(Sender: TObject);
     procedure MenuDifLowClick(Sender: TObject);
     procedure MenuDifMediumClick(Sender: TObject);
@@ -174,35 +173,35 @@ type
     procedure MenuSoundPauseClick(Sender: TObject);
     procedure MenuSoundMoveClick(Sender: TObject);
   private
-    bSquare, bAutoDif, bGameRunning, bGameStart, bShowGhost,
-      bSoundRotate, bSoundFall, bSoundPoint, bSoundPause,
-      bSoundWipeoff, bBlink, bBlinking, bSoundMove, bSoundOver: boolean;
+    bSquare, bAutoDif, bGameRunning, bGameStart, bShowGhost, bSoundRotate,
+      bSoundFall, bSoundPoint, bSoundPause, bSoundWipeoff, bBlink, bBlinking,
+      bSoundMove, bSoundOver: boolean;
     GInterval, GCount, GTimeAddDif, GAddDifNum, GFallTime: integer;
     GHandle: DWORD;
-    procedure DrawBackGround(); //绘制背景
-    procedure DrawSquare(tmpSquare: TSquareType; tmpPenColor, tmpBrushColor:
-      TColor); //绘制方块
-    procedure DrawSquareArray(tmpSquare: TSquareArray); //绘制下落中的方块
-    procedure DrawBottomArray(tmpData: TDataArray); //绘制底部方块堆
-    procedure DrawBlankArray(tmpData: TDataArray); //绘制所有没有方块的区域
-    procedure SelfChange(); //窗口大小根据游戏大小调整
-    procedure EraseOldSquare(tmpOldSquare: TSquareArray); //擦除旧方块
+    procedure DrawBackGround(); // 绘制背景
+    procedure DrawSquare(tmpSquare: TSquareType;
+      tmpPenColor, tmpBrushColor: TColor); // 绘制方块
+    procedure DrawSquareArray(tmpSquare: TSquareArray); // 绘制下落中的方块
+    procedure DrawBottomArray(tmpData: TDataArray); // 绘制底部方块堆
+    procedure DrawBlankArray(tmpData: TDataArray); // 绘制所有没有方块的区域
+    procedure SelfChange(); // 窗口大小根据游戏大小调整
+    procedure EraseOldSquare(tmpOldSquare: TSquareArray); // 擦除旧方块
     procedure ShowNextSquareArray(var tmpNextSquare: TSquareArray);
-    //绘制下一个方块
-    procedure ShowNextSquare(tmpNextSquare: TSquareType; tmpPenColor,
-      tmpBrushColor:
-      TColor); //绘制方块
-    procedure ShowNextBackGround(); //绘制预览窗口中的背景
-    procedure HideNowSquare(tmpSquare: TSquareArray); //隐藏当前方块
-    procedure BlinkLine(tmpData: TDataArray; tmpNumArray: array of Integer;
-      tmpLen: integer); //闪烁底部待消除的方块行
-    procedure MoveNowSquareToBottomDirectly
-      (var tmpSquare: TSquareArray; tmpData: TDataArray); //当前方块下落处理
-    procedure CreateGhostSquare(tmpGhostSquare: TSquareArray); //产生影子方块
+    // 绘制下一个方块
+    procedure ShowNextSquare(tmpNextSquare: TSquareType;
+      tmpPenColor, tmpBrushColor: TColor); // 绘制方块
+    procedure ShowNextBackGround(); // 绘制预览窗口中的背景
+    procedure HideNowSquare(tmpSquare: TSquareArray); // 隐藏当前方块
+    procedure BlinkLine(tmpData: TDataArray; tmpNumArray: array of integer;
+      tmpLen: integer); // 闪烁底部待消除的方块行
+    procedure MoveNowSquareToBottomDirectly(var tmpSquare: TSquareArray;
+      tmpData: TDataArray); // 当前方块下落处理
+    procedure CreateGhostSquare(tmpGhostSquare: TSquareArray); // 产生影子方块
     procedure ShowGhostSquare(tmpGhostSquare: TSquareArray; flag: boolean);
-    //显示影子方块
-    procedure ProcessMessage_MESSAGE_SOUND(var MyMessage: TMessage); message MESSAGE_SOUND;
-  { Private declarations }
+    // 显示影子方块
+    procedure ProcessMessage_MESSAGE_SOUND(var MyMessage: TMessage);
+      message MESSAGE_SOUND;
+    { Private declarations }
 
   public
     { Public declarations }
@@ -245,8 +244,8 @@ begin
   result := 0;
 end;
 
-//这是报分函数，可以报最大不超过一千的数字。但是没有找到合适的声音文件如
-//1.wav,2.wav,...,0.wav,bai.wav[百],shi.wav[十],fen.wav[分]等
+// 这是报分函数，可以报最大不超过一千的数字。但是没有找到合适的声音文件如
+// 1.wav,2.wav,...,0.wav,bai.wav[百],shi.wav[十],fen.wav[分]等
 
 function PlayCount(p: Pointer): integer; stdcall;
 var
@@ -257,69 +256,69 @@ begin
   tmpShi := ((tmpCount - tmpGe) mod 100) div 10;
   tmpBai := ((tmpCount - tmpShi * 10 - tmpGe) mod 1000) div 100;
   if (tmpBai = 0) and (tmpShi = 0) and (tmpGe = 0) then
-    PlaySound(PChar('Wave' + IntToStr(tmpGe)), hInstance, SND_SYNC or
-      SND_RESOURCE)
+    PlaySound(PChar('Wave' + IntToStr(tmpGe)), hInstance,
+      SND_SYNC or SND_RESOURCE)
   else if (tmpBai = 0) and (tmpShi = 0) and (tmpGe <> 0) then
-    PlaySound(PChar('Wave' + IntToStr(tmpGe)), hInstance, SND_SYNC or
-      SND_RESOURCE)
+    PlaySound(PChar('Wave' + IntToStr(tmpGe)), hInstance,
+      SND_SYNC or SND_RESOURCE)
   else if (tmpBai = 0) and (tmpShi <> 0) and (tmpGe = 0) then
   begin
-    PlaySound(PChar('Wave' + IntToStr(tmpShi)), hInstance, SND_SYNC or
-      SND_RESOURCE);
+    PlaySound(PChar('Wave' + IntToStr(tmpShi)), hInstance,
+      SND_SYNC or SND_RESOURCE);
     PlaySound(PChar('WaveShi'), hInstance, SND_SYNC or SND_RESOURCE);
   end
   else if (tmpBai = 0) and (tmpShi <> 0) and (tmpGe <> 0) then
   begin
-    PlaySound(PChar('Wave' + IntToStr(tmpShi)), hInstance, SND_SYNC or
-      SND_RESOURCE);
+    PlaySound(PChar('Wave' + IntToStr(tmpShi)), hInstance,
+      SND_SYNC or SND_RESOURCE);
     PlaySound(PChar('WaveShi'), hInstance, SND_SYNC or SND_RESOURCE);
-    PlaySound(PChar('Wave' + IntToStr(tmpGe)), hInstance, SND_SYNC or
-      SND_RESOURCE);
+    PlaySound(PChar('Wave' + IntToStr(tmpGe)), hInstance,
+      SND_SYNC or SND_RESOURCE);
   end
   else if (tmpBai <> 0) and (tmpShi = 0) and (tmpGe = 0) then
   begin
-    PlaySound(PChar('Wave' + IntToStr(tmpBai)), hInstance, SND_SYNC or
-      SND_RESOURCE);
+    PlaySound(PChar('Wave' + IntToStr(tmpBai)), hInstance,
+      SND_SYNC or SND_RESOURCE);
     PlaySound(PChar('WaveBai'), hInstance, SND_SYNC or SND_RESOURCE);
   end
   else if (tmpBai <> 0) and (tmpShi = 0) and (tmpGe <> 0) then
   begin
-    PlaySound(PChar('Wave' + IntToStr(tmpBai)), hInstance, SND_SYNC or
-      SND_RESOURCE);
+    PlaySound(PChar('Wave' + IntToStr(tmpBai)), hInstance,
+      SND_SYNC or SND_RESOURCE);
     PlaySound(PChar('WaveBai'), hInstance, SND_SYNC or SND_RESOURCE);
     PlaySound(PChar('Wave0'), hInstance, SND_SYNC or SND_RESOURCE);
-    PlaySound(PChar('Wave' + IntToStr(tmpGe)), hInstance, SND_SYNC or
-      SND_RESOURCE);
+    PlaySound(PChar('Wave' + IntToStr(tmpGe)), hInstance,
+      SND_SYNC or SND_RESOURCE);
   end
   else if (tmpBai <> 0) and (tmpShi <> 0) and (tmpGe = 0) then
   begin
-    PlaySound(PChar('Wave' + IntToStr(tmpBai)), hInstance, SND_SYNC or
-      SND_RESOURCE);
+    PlaySound(PChar('Wave' + IntToStr(tmpBai)), hInstance,
+      SND_SYNC or SND_RESOURCE);
     PlaySound(PChar('WaveBai'), hInstance, SND_SYNC or SND_RESOURCE);
-    PlaySound(PChar('Wave' + IntToStr(tmpShi)), hInstance, SND_SYNC or
-      SND_RESOURCE);
+    PlaySound(PChar('Wave' + IntToStr(tmpShi)), hInstance,
+      SND_SYNC or SND_RESOURCE);
     PlaySound(PChar('WaveShi'), hInstance, SND_SYNC or SND_RESOURCE);
   end
   else if (tmpBai <> 0) and (tmpShi <> 0) and (tmpGe <> 0) then
   begin
-    PlaySound(PChar('Wave' + IntToStr(tmpBai)), hInstance, SND_SYNC or
-      SND_RESOURCE);
+    PlaySound(PChar('Wave' + IntToStr(tmpBai)), hInstance,
+      SND_SYNC or SND_RESOURCE);
     PlaySound(PChar('WaveBai'), hInstance, SND_SYNC or SND_RESOURCE);
-    PlaySound(PChar('Wave' + IntToStr(tmpShi)), hInstance, SND_SYNC or
-      SND_RESOURCE);
+    PlaySound(PChar('Wave' + IntToStr(tmpShi)), hInstance,
+      SND_SYNC or SND_RESOURCE);
     PlaySound(PChar('WaveShi'), hInstance, SND_SYNC or SND_RESOURCE);
-    PlaySound(PChar('Wave' + IntToStr(tmpGe)), hInstance, SND_SYNC or
-      SND_RESOURCE);
+    PlaySound(PChar('Wave' + IntToStr(tmpGe)), hInstance,
+      SND_SYNC or SND_RESOURCE);
   end;
   PlaySound(PChar('WaveFen'), hInstance, SND_SYNC or SND_RESOURCE);
   result := 0;
 end;
 
-//产生影子方块
+// 产生影子方块
 
 procedure TFormMain.CreateGhostSquare(tmpGhostSquare: TSquareArray);
 var
-  i, j: Integer;
+  i, j: integer;
 begin
   if not bSquare then
     Exit;
@@ -332,7 +331,7 @@ begin
   end;
 end;
 
-//绘制背景
+// 绘制背景
 
 procedure TFormMain.DrawBackGround();
 begin
@@ -345,7 +344,7 @@ begin
   end;
 end;
 
-//绘制所有没有方块的区域
+// 绘制所有没有方块的区域
 
 procedure TFormMain.DrawBlankArray(tmpData: TDataArray);
 var
@@ -357,7 +356,7 @@ begin
         DrawSquare(tmpData[i, j], GBlankColor, GBlankColor);
 end;
 
-//擦除旧方块
+// 擦除旧方块
 
 procedure TFormMain.EraseOldSquare(tmpOldSquare: TSquareArray);
 var
@@ -376,7 +375,7 @@ end;
 
 procedure TFormMain.FormCreate(Sender: TObject);
 begin
-  //初始化所有全局变量。
+  // 初始化所有全局变量。
   GInterval := 400;
   GTimeAddDif := 20000;
   GAddDifNum := 1;
@@ -419,7 +418,7 @@ end;
 
 procedure TFormMain.FormDestroy(Sender: TObject);
 begin
-  FreeData(Gdata);
+  FreeData(GData);
 end;
 
 procedure TFormMain.FormKeyDown(Sender: TObject; var Key: Word;
@@ -467,7 +466,7 @@ begin
   else if bGameRunning and bSquare and (Key = VK_DOWN) then
   begin
     TimerSquareMove.Enabled := false;
-    MoveNowSquareToBottomDirectly(GNowSquare, Gdata);
+    MoveNowSquareToBottomDirectly(GNowSquare, GData);
     TimerSquareMoveTimer(Sender);
     if not CanGetSquare(GNextSquare) then
     begin
@@ -476,9 +475,8 @@ begin
         CreateThread(nil, 0, @PlayCount, nil, 0, GHandle);
       if bSoundOver then
         PlaySound('WaveGameFail', hInstance, SND_ASYNC or SND_RESOURCE);
-      MessageBox(Self.Handle, '您好，游戏结束了！', '游戏信息', MB_OK or
-        MB_ICONINFORMATION);
-      exit;
+      MessageBox(Self.Handle, '您好，游戏结束了！', '游戏信息', MB_OK or MB_ICONINFORMATION);
+      Exit;
     end;
     Sleep(NEXTTIME);
     GetSquare(GNowSquare, GNextSquare);
@@ -508,7 +506,7 @@ begin
     Close;
 end;
 
-//隐藏当前方块
+// 隐藏当前方块
 
 procedure TFormMain.HideNowSquare(tmpSquare: TSquareArray);
 begin
@@ -697,7 +695,7 @@ begin
   bShowGhost := MenuShowGhost.Checked;
 end;
 
-//当前方块下落处理
+// 当前方块下落处理
 
 procedure TFormMain.MoveNowSquareToBottomDirectly(var tmpSquare: TSquareArray;
   tmpData: TDataArray);
@@ -930,11 +928,12 @@ begin
     MediaPlayer1.FileName := GetTempDirectory + 'music.wav';
     MediaPlayer1.DeviceType := dtAutoSelect;
     MediaPlayer1.Open;
-  end else
+  end
+  else
     MessageBox(Self.Handle, '对不起，声音文件暂时不可用！', '信息', MB_OK);
 end;
 
-//窗口大小根据游戏大小调整
+// 窗口大小根据游戏大小调整
 
 procedure TFormMain.SelfChange;
 begin
@@ -942,10 +941,10 @@ begin
   Self.ClientHeight := MAX_Y * MULY + 2 * STARTY;
 end;
 
-//显示影子方块
+// 显示影子方块
 
-procedure TFormMain.ShowGhostSquare(tmpGhostSquare: TSquareArray; flag:
-  boolean);
+procedure TFormMain.ShowGhostSquare(tmpGhostSquare: TSquareArray;
+  flag: boolean);
 var
   tmpColor: TColor;
   i, j: integer;
@@ -962,7 +961,7 @@ begin
         DrawSquare(tmpGhostSquare[i, j], tmpColor, GBlankColor);
 end;
 
-//绘制预览窗口中的背景
+// 绘制预览窗口中的背景
 
 procedure TFormMain.ShowNextBackGround;
 var
@@ -983,7 +982,7 @@ begin
     end;
 end;
 
-//绘制下一个方块
+// 绘制下一个方块
 
 procedure TFormMain.ShowNextSquareArray(var tmpNextSquare: TSquareArray);
 var
@@ -997,8 +996,8 @@ begin
           tmpNextSquare[i, j].Color);
 end;
 
-procedure TFormMain.ShowNextSquare(tmpNextSquare: TSquareType; tmpPenColor,
-  tmpBrushColor: TColor);
+procedure TFormMain.ShowNextSquare(tmpNextSquare: TSquareType;
+  tmpPenColor, tmpBrushColor: TColor);
 var
   tmpI, tmpJ, PosX, PosY: integer;
 begin
@@ -1017,7 +1016,7 @@ begin
   end;
 end;
 
-//绘制底部方块堆
+// 绘制底部方块堆
 
 procedure TFormMain.DrawBottomArray(tmpData: TDataArray);
 var
@@ -1029,11 +1028,11 @@ begin
         DrawSquare(tmpData[i, j], tmpData[i, j].Color, tmpData[i, j].Color);
 end;
 
-//绘制方块
-//美术功底好的话，可以尝试将方块绘制得更加美观。
+// 绘制方块
+// 美术功底好的话，可以尝试将方块绘制得更加美观。
 
-procedure TFormMain.DrawSquare(tmpSquare: TSquareType; tmpPenColor,
-  tmpBrushColor: TColor);
+procedure TFormMain.DrawSquare(tmpSquare: TSquareType;
+  tmpPenColor, tmpBrushColor: TColor);
 var
   tmpI, tmpJ, PosX, PosY: integer;
 begin
@@ -1052,7 +1051,7 @@ begin
   end;
 end;
 
-//绘制下落中的方块
+// 绘制下落中的方块
 
 procedure TFormMain.DrawSquareArray(tmpSquare: TSquareArray);
 var
@@ -1061,53 +1060,53 @@ begin
   for i := 0 to MAX - 1 do
     for j := 0 to MAX - 1 do
       if tmpSquare[i, j].SquareType = SQUARE then
-        DrawSquare(tmpSquare[i, j], tmpSquare[i, j].Color, tmpSquare[i,
-          j].Color);
+        DrawSquare(tmpSquare[i, j], tmpSquare[i, j].Color,
+          tmpSquare[i, j].Color);
 end;
 
 procedure TFormMain.TimerSquareMoveTimer(Sender: TObject);
 var
   tmpNum, tmpCount, tmpLen: integer;
   bDelete, bNeedDelete: boolean;
-  tmpNumArray: array[1..MAX_Y] of Integer;
+  tmpNumArray: array [1 .. MAX_Y] of integer;
 begin
   if bSquare then
   begin
-    //bSquare = true表示当前主界面中存在移动中的方块
+    // bSquare = true表示当前主界面中存在移动中的方块
     if TouchBottom(GNowSquare, GData) then
     begin
-      //当前方块已经移动到底部方块堆
-      AddToBottom(GNowSquare, GData); //添加当前方块到底部
-      ShowGhostSquare(GGhostSquare, false); //消除当前方块的阴影
+      // 当前方块已经移动到底部方块堆
+      AddToBottom(GNowSquare, GData); // 添加当前方块到底部
+      ShowGhostSquare(GGhostSquare, false); // 消除当前方块的阴影
 
-      bNeedDelete := NeedDeleteBottom(GData, tmpNum); //底部方块堆需要清理
+      bNeedDelete := NeedDeleteBottom(GData, tmpNum); // 底部方块堆需要清理
       if bSoundFall and (not bNeedDelete) then
         PlaySound('WaveFall', hInstance, SND_ASYNC or SND_RESOURCE);
-      DrawBottomArray(GData); //显示底部方块堆
+      DrawBottomArray(GData); // 显示底部方块堆
       tmpCount := 0;
       bDelete := false;
 
       if bNeedDelete then
       begin
         tmpLen := 0;
-        GetNeedDeleteBottom(GData, tmpNumArray, tmpLen); //得到需要清除的行数
+        GetNeedDeleteBottom(GData, tmpNumArray, tmpLen); // 得到需要清除的行数
         tmpCount := tmpLen;
         if bBlink then
-          BlinkLine(GData, tmpNumArray, tmpLen); //闪烁需要清除的行
+          BlinkLine(GData, tmpNumArray, tmpLen); // 闪烁需要清除的行
         bDelete := true;
-        ProcessBottom(GData, tmpNumArray, tmpLen); //清除行
+        ProcessBottom(GData, tmpNumArray, tmpLen); // 清除行
       end;
       if bSoundWipeoff and bDelete then
         PlaySound('WaveDelete', hInstance, SND_ASYNC or SND_RESOURCE);
       GCount := GCount + GetCount(tmpCount);
-      CreateThread(nil, 0, @ShowCount, nil, 0, GHandle); //创建线程动态显示分数
-      DrawBottomArray(GData); //重绘底部方块堆
-      DrawBlankArray(GData); //重绘空白区域
+      CreateThread(nil, 0, @ShowCount, nil, 0, GHandle); // 创建线程动态显示分数
+      DrawBottomArray(GData); // 重绘底部方块堆
+      DrawBlankArray(GData); // 重绘空白区域
       bSquare := false;
     end
     else
     begin
-      //当前方块还没有触底
+      // 当前方块还没有触底
       SquareArrayCopyTo(GNowSquare, GOldSquare);
       MoveSquare(GNowSquare, TODOWN);
       EraseOldSquare(GOldSquare);
@@ -1116,32 +1115,31 @@ begin
   end
   else
   begin
-    //bSquare = false表示当前主界面不存在可移动的方块
+    // bSquare = false表示当前主界面不存在可移动的方块
     if not CanGetSquare(GNextSquare) then
     begin
-      //不能够在主界面上产生方块，游戏结束。
+      // 不能够在主界面上产生方块，游戏结束。
       MenuGameStopClick(Sender);
       if bSoundPoint then
         CreateThread(nil, 0, @PlayCount, nil, 0, GHandle);
       if bSoundOver then
         PlaySound('WaveGameFail', hInstance, SND_ASYNC or SND_RESOURCE);
-      MessageBox(Self.Handle, '您好，游戏结束了！', '游戏信息', MB_OK or
-        MB_ICONINFORMATION);
+      MessageBox(Self.Handle, '您好，游戏结束了！', '游戏信息', MB_OK or MB_ICONINFORMATION);
     end
     else
     begin
-      //能够在主界面上产生方块，游戏继续进行。
+      // 能够在主界面上产生方块，游戏继续进行。
       Sleep(NEXTTIME);
-      GetSquare(GNowSquare, GNextSquare); //得到下一个方块存到当前方块
+      GetSquare(GNowSquare, GNextSquare); // 得到下一个方块存到当前方块
       GenerateNextSquare(GNextSquare, GetRandomNumber(MAXFORM),
         GetRandomNumber(MAX));
-      //继续产生下一个方块
-      ShowNextSquareArray(GNextSquare); //预览区域显示产生的下一个方块
+      // 继续产生下一个方块
+      ShowNextSquareArray(GNextSquare); // 预览区域显示产生的下一个方块
       TimerSquareMove.Interval := GInterval;
       bSquare := true;
-      CreateGhostSquare(GGhostSquare); //创建当前方块的阴影方块
-      ShowGhostSquare(GGhostSquare, true); //显示阴影方块
-      DrawSquareArray(GNowSquare); //在主窗口绘制当前方块
+      CreateGhostSquare(GGhostSquare); // 创建当前方块的阴影方块
+      ShowGhostSquare(GGhostSquare, true); // 显示阴影方块
+      DrawSquareArray(GNowSquare); // 在主窗口绘制当前方块
     end;
   end;
 end;
@@ -1149,7 +1147,7 @@ end;
 procedure TFormMain.TimerAutoAddDifficultyTimer(Sender: TObject);
 begin
   if (not bGameRunning) or bBlinking then
-    exit;
+    Exit;
   TimerSquareMove.Enabled := false;
   Application.ProcessMessages;
   HideNowSquare(GNowSquare);
@@ -1171,7 +1169,8 @@ begin
       MediaPlayer1.Play
     else
       MediaPlayer1.Stop;
-  end else
+  end
+  else
     MessageBox(Self.Handle, '对不起，声音文件暂时不可用！', '信息', MB_OK);
 end;
 
@@ -1196,10 +1195,10 @@ begin
   end;
 end;
 
-//闪烁底部待消除的方块行
+// 闪烁底部待消除的方块行
 
 procedure TFormMain.BlinkLine(tmpData: TDataArray;
-  tmpNumArray: array of Integer; tmpLen: integer);
+  tmpNumArray: array of integer; tmpLen: integer);
 var
   start, i, j, k: integer;
 begin
@@ -1227,4 +1226,3 @@ begin
 end;
 
 end.
-
