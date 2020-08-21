@@ -179,25 +179,24 @@ type
     GInterval, GCount, GTimeAddDif, GAddDifNum, GFallTime: integer;
     GHandle: DWORD;
     procedure DrawBackGround(); // 绘制背景
-    procedure DrawSquare(tmpSquare: TSquareType;
-      tmpPenColor, tmpBrushColor: TColor); // 绘制方块
-    procedure DrawSquareArray(tmpSquare: TSquareArray); // 绘制下落中的方块
-    procedure DrawBottomArray(tmpData: TDataArray); // 绘制底部方块堆
-    procedure DrawBlankArray(tmpData: TDataArray); // 绘制所有没有方块的区域
+    procedure DrawSquare(s: TSquareType; penColor, brushColor: TColor); // 绘制方块
+    procedure DrawSquareArray(s: TSquareArray); // 绘制下落中的方块
+    procedure DrawBottomArray(data: TDataArray); // 绘制底部方块堆
+    procedure DrawBlankArray(data: TDataArray); // 绘制所有没有方块的区域
     procedure SelfChange(); // 窗口大小根据游戏大小调整
-    procedure EraseOldSquare(tmpOldSquare: TSquareArray); // 擦除旧方块
-    procedure ShowNextSquareArray(var tmpNextSquare: TSquareArray);
+    procedure EraseOldSquare(s: TSquareArray); // 擦除旧方块
+    procedure ShowNextSquareArray(var next: TSquareArray);
     // 绘制下一个方块
-    procedure ShowNextSquare(tmpNextSquare: TSquareType;
-      tmpPenColor, tmpBrushColor: TColor); // 绘制方块
+    procedure ShowNextSquare(next: TSquareType; penColor, brushColor: TColor);
+    // 绘制方块
     procedure ShowNextBackGround(); // 绘制预览窗口中的背景
-    procedure HideNowSquare(tmpSquare: TSquareArray); // 隐藏当前方块
-    procedure BlinkLine(tmpData: TDataArray; tmpNumArray: array of integer;
-      tmpLen: integer); // 闪烁底部待消除的方块行
+    procedure HideNowSquare(s: TSquareArray); // 隐藏当前方块
+    procedure BlinkLine(data: TDataArray; nums: array of integer; len: integer);
+    // 闪烁底部待消除的方块行
     procedure MoveNowSquareToBottomDirectly(var tmpSquare: TSquareArray;
       tmpData: TDataArray); // 当前方块下落处理
-    procedure CreateGhostSquare(tmpGhostSquare: TSquareArray); // 产生影子方块
-    procedure ShowGhostSquare(tmpGhostSquare: TSquareArray; flag: boolean);
+    procedure CreateGhostSquare(s: TSquareArray); // 产生影子方块
+    procedure ShowGhostSquare(s: TSquareArray; flag: boolean);
     // 显示影子方块
     procedure ProcessMessage_MESSAGE_SOUND(var MyMessage: TMessage);
       message MESSAGE_SOUND;
@@ -249,65 +248,63 @@ end;
 
 function PlayCount(p: Pointer): integer; stdcall;
 var
-  tmpCount, tmpBai, tmpShi, tmpGe: integer;
+  count, bai, shi, ge: integer;
 begin
-  tmpCount := FormMain.GCount;
-  tmpGe := tmpCount mod 10;
-  tmpShi := ((tmpCount - tmpGe) mod 100) div 10;
-  tmpBai := ((tmpCount - tmpShi * 10 - tmpGe) mod 1000) div 100;
-  if (tmpBai = 0) and (tmpShi = 0) and (tmpGe = 0) then
-    PlaySound(PChar('Wave' + IntToStr(tmpGe)), hInstance,
-      SND_SYNC or SND_RESOURCE)
-  else if (tmpBai = 0) and (tmpShi = 0) and (tmpGe <> 0) then
-    PlaySound(PChar('Wave' + IntToStr(tmpGe)), hInstance,
-      SND_SYNC or SND_RESOURCE)
-  else if (tmpBai = 0) and (tmpShi <> 0) and (tmpGe = 0) then
+  count := FormMain.GCount;
+  ge := count mod 10;
+  shi := ((count - ge) mod 100) div 10;
+  bai := ((count - shi * 10 - ge) mod 1000) div 100;
+  if (bai = 0) and (shi = 0) and (ge = 0) then
+    PlaySound(PChar('Wave' + IntToStr(ge)), hInstance, SND_SYNC or SND_RESOURCE)
+  else if (bai = 0) and (shi = 0) and (ge <> 0) then
+    PlaySound(PChar('Wave' + IntToStr(ge)), hInstance, SND_SYNC or SND_RESOURCE)
+  else if (bai = 0) and (shi <> 0) and (ge = 0) then
   begin
-    PlaySound(PChar('Wave' + IntToStr(tmpShi)), hInstance,
+    PlaySound(PChar('Wave' + IntToStr(shi)), hInstance,
       SND_SYNC or SND_RESOURCE);
     PlaySound(PChar('WaveShi'), hInstance, SND_SYNC or SND_RESOURCE);
   end
-  else if (tmpBai = 0) and (tmpShi <> 0) and (tmpGe <> 0) then
+  else if (bai = 0) and (shi <> 0) and (ge <> 0) then
   begin
-    PlaySound(PChar('Wave' + IntToStr(tmpShi)), hInstance,
+    PlaySound(PChar('Wave' + IntToStr(shi)), hInstance,
       SND_SYNC or SND_RESOURCE);
     PlaySound(PChar('WaveShi'), hInstance, SND_SYNC or SND_RESOURCE);
-    PlaySound(PChar('Wave' + IntToStr(tmpGe)), hInstance,
+    PlaySound(PChar('Wave' + IntToStr(ge)), hInstance,
       SND_SYNC or SND_RESOURCE);
   end
-  else if (tmpBai <> 0) and (tmpShi = 0) and (tmpGe = 0) then
+  else if (bai <> 0) and (shi = 0) and (ge = 0) then
   begin
-    PlaySound(PChar('Wave' + IntToStr(tmpBai)), hInstance,
+    PlaySound(PChar('Wave' + IntToStr(bai)), hInstance,
       SND_SYNC or SND_RESOURCE);
     PlaySound(PChar('WaveBai'), hInstance, SND_SYNC or SND_RESOURCE);
   end
-  else if (tmpBai <> 0) and (tmpShi = 0) and (tmpGe <> 0) then
+  else if (bai <> 0) and (shi = 0) and (ge <> 0) then
   begin
-    PlaySound(PChar('Wave' + IntToStr(tmpBai)), hInstance,
+    PlaySound(PChar('Wave' + IntToStr(bai)), hInstance,
       SND_SYNC or SND_RESOURCE);
     PlaySound(PChar('WaveBai'), hInstance, SND_SYNC or SND_RESOURCE);
     PlaySound(PChar('Wave0'), hInstance, SND_SYNC or SND_RESOURCE);
-    PlaySound(PChar('Wave' + IntToStr(tmpGe)), hInstance,
+    PlaySound(PChar('Wave' + IntToStr(ge)), hInstance,
       SND_SYNC or SND_RESOURCE);
   end
-  else if (tmpBai <> 0) and (tmpShi <> 0) and (tmpGe = 0) then
+  else if (bai <> 0) and (shi <> 0) and (ge = 0) then
   begin
-    PlaySound(PChar('Wave' + IntToStr(tmpBai)), hInstance,
+    PlaySound(PChar('Wave' + IntToStr(bai)), hInstance,
       SND_SYNC or SND_RESOURCE);
     PlaySound(PChar('WaveBai'), hInstance, SND_SYNC or SND_RESOURCE);
-    PlaySound(PChar('Wave' + IntToStr(tmpShi)), hInstance,
+    PlaySound(PChar('Wave' + IntToStr(shi)), hInstance,
       SND_SYNC or SND_RESOURCE);
     PlaySound(PChar('WaveShi'), hInstance, SND_SYNC or SND_RESOURCE);
   end
-  else if (tmpBai <> 0) and (tmpShi <> 0) and (tmpGe <> 0) then
+  else if (bai <> 0) and (shi <> 0) and (ge <> 0) then
   begin
-    PlaySound(PChar('Wave' + IntToStr(tmpBai)), hInstance,
+    PlaySound(PChar('Wave' + IntToStr(bai)), hInstance,
       SND_SYNC or SND_RESOURCE);
     PlaySound(PChar('WaveBai'), hInstance, SND_SYNC or SND_RESOURCE);
-    PlaySound(PChar('Wave' + IntToStr(tmpShi)), hInstance,
+    PlaySound(PChar('Wave' + IntToStr(shi)), hInstance,
       SND_SYNC or SND_RESOURCE);
     PlaySound(PChar('WaveShi'), hInstance, SND_SYNC or SND_RESOURCE);
-    PlaySound(PChar('Wave' + IntToStr(tmpGe)), hInstance,
+    PlaySound(PChar('Wave' + IntToStr(ge)), hInstance,
       SND_SYNC or SND_RESOURCE);
   end;
   PlaySound(PChar('WaveFen'), hInstance, SND_SYNC or SND_RESOURCE);
@@ -316,7 +313,7 @@ end;
 
 // 产生影子方块
 
-procedure TFormMain.CreateGhostSquare(tmpGhostSquare: TSquareArray);
+procedure TFormMain.CreateGhostSquare(s: TSquareArray);
 var
   i, j: integer;
 begin
@@ -346,26 +343,26 @@ end;
 
 // 绘制所有没有方块的区域
 
-procedure TFormMain.DrawBlankArray(tmpData: TDataArray);
+procedure TFormMain.DrawBlankArray(data: TDataArray);
 var
   i, j: integer;
 begin
   for i := 0 to MAX_X - 1 do
     for j := 0 to MAX_Y - 1 do
-      if tmpData[i, j].SquareType = BLANK then
-        DrawSquare(tmpData[i, j], GBlankColor, GBlankColor);
+      if data[i, j].SquareType = BLANK then
+        DrawSquare(data[i, j], GBlankColor, GBlankColor);
 end;
 
 // 擦除旧方块
 
-procedure TFormMain.EraseOldSquare(tmpOldSquare: TSquareArray);
+procedure TFormMain.EraseOldSquare(s: TSquareArray);
 var
   i, j: integer;
 begin
   for i := 0 to MAX - 1 do
     for j := 0 to MAX - 1 do
-      if tmpOldSquare[i, j].SquareType = SQUARE then
-        DrawSquare(tmpOldSquare[i, j], GBlankColor, GBlankColor);
+      if s[i, j].SquareType = SQUARE then
+        DrawSquare(s[i, j], GBlankColor, GBlankColor);
 end;
 
 procedure TFormMain.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -508,10 +505,10 @@ end;
 
 // 隐藏当前方块
 
-procedure TFormMain.HideNowSquare(tmpSquare: TSquareArray);
+procedure TFormMain.HideNowSquare(s: TSquareArray);
 begin
   bSquare := false;
-  SquareArrayCopyTo(tmpSquare, GOldSquare);
+  SquareArrayCopyTo(s, GOldSquare);
   EraseOldSquare(GOldSquare);
 end;
 
@@ -561,13 +558,13 @@ end;
 
 procedure TFormMain.MenuHelpAboutClick(Sender: TObject);
 var
-  tmpFormAbout: TAboutBox;
+  fAbout: TAboutBox;
 begin
-  tmpFormAbout := TAboutBox.Create(nil);
+  fAbout := TAboutBox.Create(nil);
   try
-    tmpFormAbout.ShowModal;
+    fAbout.ShowModal;
   finally
-    tmpFormAbout.Free;
+    fAbout.Free;
   end;
 end;
 
@@ -943,22 +940,21 @@ end;
 
 // 显示影子方块
 
-procedure TFormMain.ShowGhostSquare(tmpGhostSquare: TSquareArray;
-  flag: boolean);
+procedure TFormMain.ShowGhostSquare(s: TSquareArray; flag: boolean);
 var
-  tmpColor: TColor;
+  Color: TColor;
   i, j: integer;
 begin
   if not bShowGhost then
     Exit;
   if flag then
-    tmpColor := GSquareColor
+    Color := GSquareColor
   else
-    tmpColor := GBlankColor;
+    Color := GBlankColor;
   for i := 0 to MAX - 1 do
     for j := 0 to MAX - 1 do
-      if tmpGhostSquare[i, j].SquareType = SQUARE then
-        DrawSquare(tmpGhostSquare[i, j], tmpColor, GBlankColor);
+      if s[i, j].SquareType = SQUARE then
+        DrawSquare(s[i, j], Color, GBlankColor);
 end;
 
 // 绘制预览窗口中的背景
@@ -984,67 +980,65 @@ end;
 
 // 绘制下一个方块
 
-procedure TFormMain.ShowNextSquareArray(var tmpNextSquare: TSquareArray);
+procedure TFormMain.ShowNextSquareArray(var next: TSquareArray);
 var
   i, j: integer;
 begin
   ShowNextBackGround();
   for i := 0 to MAX - 1 do
     for j := 0 to MAX - 1 do
-      if tmpNextSquare[i, j].SquareType = SQUARE then
-        ShowNextSquare(tmpNextSquare[i, j], tmpNextSquare[i, j].Color,
-          tmpNextSquare[i, j].Color);
+      if next[i, j].SquareType = SQUARE then
+        ShowNextSquare(next[i, j], next[i, j].Color, next[i, j].Color);
 end;
 
-procedure TFormMain.ShowNextSquare(tmpNextSquare: TSquareType;
-  tmpPenColor, tmpBrushColor: TColor);
+procedure TFormMain.ShowNextSquare(next: TSquareType;
+  penColor, brushColor: TColor);
 var
-  tmpI, tmpJ, PosX, PosY: integer;
+  i, j, x, y: integer;
 begin
-  tmpI := tmpNextSquare.Pos.i - MAX_X div 2 + 2;
-  tmpJ := tmpNextSquare.Pos.j;
-  PosX := IToX(tmpI);
-  PosY := JToY(tmpJ);
+  i := next.Pos.i - MAX_X div 2 + 2;
+  j := next.Pos.j;
+  x := IToX(i);
+  y := JToY(j);
   with PaintBoxNext do
   begin
-    Canvas.Pen.Color := tmpPenColor;
+    Canvas.Pen.Color := penColor;
     Canvas.Pen.Width := 1;
-    Canvas.Brush.Color := tmpBrushColor;
-    Canvas.Rectangle(PosX, PosY, PosX + LENX, PosY + LENY);
+    Canvas.Brush.Color := brushColor;
+    Canvas.Rectangle(x, y, x + LENX, y + LENY);
     Canvas.Pen.Color := GViewBlankColor;
-    Canvas.Rectangle(PosX + 1, PosY + 1, PosX + LENX - 1, PosY + LENY - 1);
+    Canvas.Rectangle(x + 1, y + 1, x + LENX - 1, y + LENY - 1);
   end;
 end;
 
 // 绘制底部方块堆
 
-procedure TFormMain.DrawBottomArray(tmpData: TDataArray);
+procedure TFormMain.DrawBottomArray(data: TDataArray);
 var
   i, j: integer;
 begin
   for i := 0 to MAX_X - 1 do
     for j := 0 to MAX_Y - 1 do
-      if tmpData[i, j].SquareType = OTHER then
-        DrawSquare(tmpData[i, j], tmpData[i, j].Color, tmpData[i, j].Color);
+      if data[i, j].SquareType = OTHER then
+        DrawSquare(data[i, j], data[i, j].Color, data[i, j].Color);
 end;
 
 // 绘制方块
 // 美术功底好的话，可以尝试将方块绘制得更加美观。
 
-procedure TFormMain.DrawSquare(tmpSquare: TSquareType;
-  tmpPenColor, tmpBrushColor: TColor);
+procedure TFormMain.DrawSquare(s: TSquareType; penColor, brushColor: TColor);
 var
-  tmpI, tmpJ, PosX, PosY: integer;
+  i, j, PosX, PosY: integer;
 begin
-  tmpI := tmpSquare.Pos.i;
-  tmpJ := tmpSquare.Pos.j;
-  PosX := IToX(tmpI);
-  PosY := JToY(tmpJ);
+  i := s.Pos.i;
+  j := s.Pos.j;
+  PosX := IToX(i);
+  PosY := JToY(j);
   with PaintBoxMain do
   begin
-    Canvas.Pen.Color := tmpPenColor;
+    Canvas.Pen.Color := penColor;
     Canvas.Pen.Width := 1;
-    Canvas.Brush.Color := tmpBrushColor;
+    Canvas.Brush.Color := brushColor;
     Canvas.Rectangle(PosX, PosY, PosX + LENX, PosY + LENY);
     Canvas.Pen.Color := GBlankColor;
     Canvas.Rectangle(PosX + 1, PosY + 1, PosX + LENX - 1, PosY + LENY - 1);
@@ -1053,22 +1047,21 @@ end;
 
 // 绘制下落中的方块
 
-procedure TFormMain.DrawSquareArray(tmpSquare: TSquareArray);
+procedure TFormMain.DrawSquareArray(s: TSquareArray);
 var
   i, j: integer;
 begin
   for i := 0 to MAX - 1 do
     for j := 0 to MAX - 1 do
-      if tmpSquare[i, j].SquareType = SQUARE then
-        DrawSquare(tmpSquare[i, j], tmpSquare[i, j].Color,
-          tmpSquare[i, j].Color);
+      if s[i, j].SquareType = SQUARE then
+        DrawSquare(s[i, j], s[i, j].Color, s[i, j].Color);
 end;
 
 procedure TFormMain.TimerSquareMoveTimer(Sender: TObject);
 var
-  tmpNum, tmpCount, tmpLen: integer;
+  num, count, len: integer;
   bDelete, bNeedDelete: boolean;
-  tmpNumArray: array [1 .. MAX_Y] of integer;
+  nums: array [1 .. MAX_Y] of integer;
 begin
   if bSquare then
   begin
@@ -1079,26 +1072,26 @@ begin
       AddToBottom(GNowSquare, GData); // 添加当前方块到底部
       ShowGhostSquare(GGhostSquare, false); // 消除当前方块的阴影
 
-      bNeedDelete := NeedDeleteBottom(GData, tmpNum); // 底部方块堆需要清理
+      bNeedDelete := NeedDeleteBottom(GData, num); // 底部方块堆需要清理
       if bSoundFall and (not bNeedDelete) then
         PlaySound('WaveFall', hInstance, SND_ASYNC or SND_RESOURCE);
       DrawBottomArray(GData); // 显示底部方块堆
-      tmpCount := 0;
+      count := 0;
       bDelete := false;
 
       if bNeedDelete then
       begin
-        tmpLen := 0;
-        GetNeedDeleteBottom(GData, tmpNumArray, tmpLen); // 得到需要清除的行数
-        tmpCount := tmpLen;
+        len := 0;
+        GetNeedDeleteBottom(GData, nums, len); // 得到需要清除的行数
+        count := len;
         if bBlink then
-          BlinkLine(GData, tmpNumArray, tmpLen); // 闪烁需要清除的行
+          BlinkLine(GData, nums, len); // 闪烁需要清除的行
         bDelete := true;
-        ProcessBottom(GData, tmpNumArray, tmpLen); // 清除行
+        ProcessBottom(GData, nums, len); // 清除行
       end;
       if bSoundWipeoff and bDelete then
         PlaySound('WaveDelete', hInstance, SND_ASYNC or SND_RESOURCE);
-      GCount := GCount + GetCount(tmpCount);
+      GCount := GCount + GetCount(count);
       CreateThread(nil, 0, @ShowCount, nil, 0, GHandle); // 创建线程动态显示分数
       DrawBottomArray(GData); // 重绘底部方块堆
       DrawBlankArray(GData); // 重绘空白区域
@@ -1197,28 +1190,28 @@ end;
 
 // 闪烁底部待消除的方块行
 
-procedure TFormMain.BlinkLine(tmpData: TDataArray;
-  tmpNumArray: array of integer; tmpLen: integer);
+procedure TFormMain.BlinkLine(data: TDataArray; nums: array of integer;
+  len: integer);
 var
   start, i, j, k: integer;
 begin
-  if tmpLen <= 0 then
+  if len <= 0 then
     Exit;
   bBlinking := true;
   for k := 1 to 3 do
   begin
-    for start := 1 to tmpLen do
+    for start := 1 to len do
     begin
-      j := tmpNumArray[start];
+      j := nums[start];
       for i := 0 to MAX_X - 1 do
-        DrawSquare(tmpData[i, j], GBlinkColor, GBlinkColor);
+        DrawSquare(data[i, j], GBlinkColor, GBlinkColor);
     end;
     Sleep(BLINKTIME div 6);
-    for start := 1 to tmpLen do
+    for start := 1 to len do
     begin
-      j := tmpNumArray[start];
+      j := nums[start];
       for i := 0 to MAX_X - 1 do
-        DrawSquare(tmpData[i, j], tmpData[i, j].Color, tmpData[i, j].Color);
+        DrawSquare(data[i, j], data[i, j].Color, data[i, j].Color);
     end;
     Sleep(BLINKTIME div 6);
   end;

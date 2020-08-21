@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <BorlandProject>
 	<Transactions>
-    <Transaction>1899-12-30 00:00:00.000.pas,F:\文档\RAD Studio\Projects\DELPHI\应用程序\tetris_src\新建文件夹\BestScor.pas=F:\文档\RAD Studio\Projects\DELPHI\应用程序\tetris_src\BestScor.pas</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.pas,F:\文档\RAD Studio\Projects\DELPHI\应用程序\tetris_src\新建文件夹\UnitMain.pas=F:\文档\RAD Studio\Projects\DELPHI\应用程序\tetris_src\UTetris.pas</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.dfm,F:\文档\RAD Studio\Projects\DELPHI\应用程序\tetris_src\新建文件夹\UnitMain.dfm=F:\文档\RAD Studio\Projects\DELPHI\应用程序\tetris_src\UTetris.dfm</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.dproj,F:\文档\RAD Studio\Projects\DELPHI\应用程序\tetris_src\新建文件夹\Tetris.dproj=F:\文档\RAD Studio\Projects\DELPHI\应用程序\tetris_src\Tetris.dproj</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.dfm,F:\文档\RAD Studio\Projects\DELPHI\应用程序\tetris_src\新建文件夹\BestScor.dfm=F:\文档\RAD Studio\Projects\DELPHI\应用程序\tetris_src\BestScor.dfm</Transaction>
+    <Transaction>1899/12/30 00:00:00.000.pas,F:\文档\RAD Studio\Projects\DELPHI\应用程序\tetris_src\BestScor.pas=F:\文档\RAD Studio\Projects\DELPHI\应用程序\tetris_src\新建文件夹\BestScor.pas</Transaction>
+    <Transaction>1899/12/30 00:00:00.000.dfm,F:\文档\RAD Studio\Projects\DELPHI\应用程序\tetris_src\UTetris.dfm=F:\文档\RAD Studio\Projects\DELPHI\应用程序\tetris_src\新建文件夹\UnitMain.dfm</Transaction>
+    <Transaction>1899/12/30 00:00:00.000.dproj,F:\文档\RAD Studio\Projects\DELPHI\应用程序\tetris_src\Tetris.dproj=F:\文档\RAD Studio\Projects\DELPHI\应用程序\tetris_src\新建文件夹\Tetris.dproj</Transaction>
+    <Transaction>1899/12/30 00:00:00.000.dfm,F:\文档\RAD Studio\Projects\DELPHI\应用程序\tetris_src\BestScor.dfm=F:\文档\RAD Studio\Projects\DELPHI\应用程序\tetris_src\新建文件夹\BestScor.dfm</Transaction>
+    <Transaction>1899/12/30 00:00:00.000.pas,F:\文档\RAD Studio\Projects\DELPHI\应用程序\tetris_src\UTetris.pas=F:\文档\RAD Studio\Projects\DELPHI\应用程序\tetris_src\新建文件夹\UnitMain.pas</Transaction>
   </Transactions>
 </BorlandProject>
