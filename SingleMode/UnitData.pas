@@ -35,7 +35,7 @@ function IsNumber(s: string): boolean;
 procedure GetNeedDeleteBottom(data: TDataArray; var nums: array of integer;
   var len: integer);
 // 处理底部方块堆
-procedure ProcessBottom(data: TDataArray; nums: array of integer; len: integer);
+procedure ProcessBottom(data: TDataArray);
 // 给底部方块堆添加未消行，以增加难度
 procedure AddSomeToBottom(var data: TDataArray; num: integer);
 function GetRandomNumber(n: integer): cardinal;
@@ -329,24 +329,44 @@ begin
   end;
 end;
 
-// 需要优化
-
-procedure ProcessBottom(data: TDataArray; nums: array of integer; len: integer);
+procedure ProcessBottom(data: TDataArray);
 var
-  i, j, num: integer;
+  i, j, k: integer;
+  isFull: boolean;
 begin
-  if len <= 0 then
-    exit;
-  while NeedDeleteBottom(data, num) do
+  k := MAX_Y - 1;
+
+  while k >= 0 do
   begin
+    isFull := true;
     for i := 0 to MAX_X - 1 do
-      for j := num - 1 downto 0 do
+    begin
+       if data[i, k].SquareType <> OTHER then
+        begin
+          isFull := false;
+          break;
+        end;
+    end;
+    if isFull then
+    begin
+      for j := k - 1 downto 1 do
+        for i := 0 to MAX_X - 1 do
+          begin
+            data[i, j + 1].SquareType := data[i, j].SquareType;
+            data[i, j + 1].Color := data[i, j].Color;
+            data[i, j + 1].Pos.i := data[i, j].Pos.i;
+            data[i, j + 1].Pos.j := data[i, j].Pos.j + 1;
+          end;
+      for i := 0 to MAX_X - 1 do
       begin
-        data[i, j + 1].SquareType := data[i, j].SquareType;
-        data[i, j + 1].Color := data[i, j].Color;
-        data[i, j + 1].Pos.i := data[i, j].Pos.i;
-        data[i, j + 1].Pos.j := data[i, j].Pos.j + 1;
+        data[i, 0].SquareType := BLANK;
+        data[i, 0].Color := GBlankColor;
+        data[i, 0].Pos.i := i;
+        data[i, 0].Pos.j := 0;
       end;
+    end
+    else
+      dec(k);
   end;
 end;
 

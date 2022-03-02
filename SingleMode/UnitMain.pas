@@ -411,6 +411,7 @@ begin
   TimerAutoAddDifficulty.Interval := GTimeAddDif;
   GCriticalSection := TCriticalSection.Create();
   GThread := TThreadSoundRelease.Create(Self);
+  OutputDebugString('initializing...');
 end;
 
 procedure TFormMain.FormDestroy(Sender: TObject);
@@ -1087,7 +1088,7 @@ begin
         if bBlink then
           BlinkLine(GData, nums, len); // 闪烁需要清除的行
         bDelete := true;
-        ProcessBottom(GData, nums, len); // 清除行
+        ProcessBottom(GData); // 清除行
       end;
       if bSoundWipeoff and bDelete then
         PlaySound('WaveDelete', hInstance, SND_ASYNC or SND_RESOURCE);
