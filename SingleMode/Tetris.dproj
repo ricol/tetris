@@ -76,15 +76,15 @@
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
-        <DCCReference Include="UnitMain.pas">
+        <DCCReference Include="Main.pas">
             <Form>FormMain</Form>
         </DCCReference>
-        <DCCReference Include="UnitData.pas"/>
-        <DCCReference Include="UnitCommon.pas"/>
-        <DCCReference Include="UnitAbout.pas">
+        <DCCReference Include="Data.pas"/>
+        <DCCReference Include="Common.pas"/>
+        <DCCReference Include="About.pas">
             <Form>AboutBox</Form>
         </DCCReference>
-        <DCCReference Include="UnitThreadSoundRelease.pas"/>
+        <DCCReference Include="ThreadSoundRelease.pas"/>
         <BuildConfiguration Include="Debug">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
