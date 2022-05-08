@@ -332,12 +332,12 @@ end;
 
 procedure TFormMain.DrawBackGround();
 begin
-  with PaintBoxMain do
+  with PaintBoxMain.Canvas do
   begin
-    Canvas.Pen.Color := GBackGroundColor;
-    Canvas.Pen.Width := 1;
-    Canvas.Brush.Color := GBackGroundColor;
-    Canvas.Rectangle(0, 0, Width - 1, Height - 1);
+    Pen.Color := GBackGroundColor;
+    Pen.Width := 1;
+    Brush.Color := GBackGroundColor;
+    Rectangle(0, 0, Width - 1, Height - 1);
   end;
 end;
 
@@ -969,12 +969,12 @@ begin
     begin
       PosX := IToX(i);
       PosY := JToY(j);
-      with PaintBoxNext do
+      with PaintBoxNext.Canvas do
       begin
-        Canvas.Pen.Color := GViewBackGroundColor;
-        Canvas.Brush.Color := GViewBlankColor;
-        Canvas.Pen.Width := 1;
-        Canvas.Rectangle(PosX - 1, PosY - 1, PosX + LENX + 1, PosY + LENY + 1);
+        Pen.Color := GViewBackGroundColor;
+        Brush.Color := GViewBlankColor;
+        Pen.Width := 1;
+        Rectangle(PosX - 1, PosY - 1, PosX + LENX + 1, PosY + LENY + 1);
       end;
     end;
 end;
@@ -1001,14 +1001,14 @@ begin
   j := next.Pos.j;
   x := IToX(i);
   y := JToY(j);
-  with PaintBoxNext do
+  with PaintBoxNext.Canvas do
   begin
-    Canvas.Pen.Color := penColor;
-    Canvas.Pen.Width := 1;
-    Canvas.Brush.Color := brushColor;
-    Canvas.Rectangle(x, y, x + LENX, y + LENY);
-    Canvas.Pen.Color := GViewBlankColor;
-    Canvas.Rectangle(x + 1, y + 1, x + LENX - 1, y + LENY - 1);
+    Pen.Color := penColor;
+    Pen.Width := 1;
+    Brush.Color := brushColor;
+    Rectangle(x, y, x + LENX, y + LENY);
+    Pen.Color := GViewBlankColor;
+    Rectangle(x + 1, y + 1, x + LENX - 1, y + LENY - 1);
   end;
 end;
 
@@ -1035,14 +1035,14 @@ begin
   j := s.Pos.j;
   PosX := IToX(i);
   PosY := JToY(j);
-  with PaintBoxMain do
+  with PaintBoxMain.Canvas do
   begin
-    Canvas.Pen.Color := penColor;
-    Canvas.Pen.Width := 1;
-    Canvas.Brush.Color := brushColor;
-    Canvas.Rectangle(PosX, PosY, PosX + LENX, PosY + LENY);
-    Canvas.Pen.Color := GBlankColor;
-    Canvas.Rectangle(PosX + 1, PosY + 1, PosX + LENX - 1, PosY + LENY - 1);
+    Pen.Color := penColor;
+    Pen.Width := 1;
+    Brush.Color := brushColor;
+    Rectangle(PosX, PosY, PosX + LENX, PosY + LENY);
+    Pen.Color := GBlankColor;
+    Rectangle(PosX + 1, PosY + 1, PosX + LENX - 1, PosY + LENY - 1);
   end;
 end;
 
